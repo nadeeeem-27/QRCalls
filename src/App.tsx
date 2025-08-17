@@ -34,15 +34,35 @@ const AnimatedBackground = () => {
 
 function App() {
   const [isVisible, setIsVisible] = useState(false);
+  const [taglinePhase, setTaglinePhase] = useState('entering'); // 'entering', 'visible', 'exiting', 'hidden'
 
   useEffect(() => {
     setIsVisible(true);
+    
+    // Tagline animation sequence
+    const timer1 = setTimeout(() => {
+      setTaglinePhase('visible');
+    }, 800);
+    
+    const timer2 = setTimeout(() => {
+      setTaglinePhase('exiting');
+    }, 3500);
+    
+    const timer3 = setTimeout(() => {
+      setTaglinePhase('hidden');
+    }, 4500);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
   }, []);
 
   return (
     <div className="min-h-screen relative">
       {/* Custom Styles */}
-      <style >{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
           33% { transform: translateY(-10px) rotate(120deg); }
@@ -52,6 +72,34 @@ function App() {
           0%, 100% { transform: translate(0px, 0px) scale(1); }
           33% { transform: translate(30px, -50px) scale(1.1); }
           66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        @keyframes taglineSlideIn {
+          0% { 
+            transform: translateX(-100px); 
+            opacity: 0; 
+            filter: blur(4px);
+          }
+          100% { 
+            transform: translateX(0); 
+            opacity: 1; 
+            filter: blur(0px);
+          }
+        }
+        @keyframes taglineSlideOut {
+          0% { 
+            transform: translateX(0); 
+            opacity: 1; 
+            filter: blur(0px);
+          }
+          100% { 
+            transform: translateX(120px); 
+            opacity: 0; 
+            filter: blur(4px);
+          }
+        }
+        @keyframes taglineGlow {
+          0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+          50% { text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 25px rgba(147, 51, 234, 0.4); }
         }
         .animate-float {
           animation: float linear infinite;
@@ -65,6 +113,18 @@ function App() {
         .animation-delay-4000 {
           animation-delay: 4s;
         }
+        .tagline-entering {
+          animation: taglineSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        .tagline-visible {
+          animation: taglineGlow 2s ease-in-out infinite;
+        }
+        .tagline-exiting {
+          animation: taglineSlideOut 1s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+        }
+        .tagline-hidden {
+          display: none;
+        }
       `}</style>
 
       {/* Navigation */}
@@ -73,7 +133,10 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <QrCode className="h-8 w-8 text-white" />
-              <span className="text-xl font-bold text-white">QR Calls</span>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white leading-tight">QR Calls</span>
+                <span className="text-xs text-white leading-tight">Always around you</span>
+              </div>
             </div>
             <button className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/30 px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105">
               Get Started
@@ -87,6 +150,24 @@ function App() {
         <AnimatedBackground />
         <div className="max-w-7xl mx-auto">
           <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            {/* Company Branding */}
+            <div className="mb-8 relative z-10">
+              <div className="flex items-center justify-center space-x-3 mb-3">
+                <div className="bg-white/10 backdrop-blur-sm rounded-full p-3 border border-white/20">
+                  <QrCode className="h-7 w-7 text-white/60" />
+                </div>
+                <div className="text-left">
+                  <h2 className="text-xl md:text-2xl font-bold text-white/60 tracking-wide">
+                    QR CALLS
+                  </h2>
+                  <p className="text-xs md:text-sm text-purple-200/60 font-medium tracking-wider uppercase">
+                    Always Around You
+                  </p>
+                </div>
+              </div>
+              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-purple-300 to-transparent mx-auto opacity-60"></div>
+            </div>
+
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 relative z-10">
               Skip the Wait,
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-violet-300 block">Start the Conversation</span>
