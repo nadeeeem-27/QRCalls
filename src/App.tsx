@@ -150,23 +150,6 @@ function App() {
         <AnimatedBackground />
         <div className="max-w-7xl mx-auto">
           <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            {/* Company Branding */}
-            <div className="mb-8 relative z-10">
-              <div className="flex items-center justify-center space-x-3 mb-3">
-                <div className="bg-white/10 backdrop-blur-sm rounded-full p-3 border border-white/20">
-                  <QrCode className="h-7 w-7 text-white/60" />
-                </div>
-                <div className="text-left">
-                  <h2 className="text-xl md:text-2xl font-bold text-white/60 tracking-wide">
-                    QR CALLS
-                  </h2>
-                  <p className="text-xs md:text-sm text-purple-200/60 font-medium tracking-wider uppercase">
-                    Always Around You
-                  </p>
-                </div>
-              </div>
-              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-purple-300 to-transparent mx-auto opacity-60"></div>
-            </div>
 
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 relative z-10">
               Skip the Wait,
